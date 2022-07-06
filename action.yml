@@ -33,7 +33,13 @@ runs:
       if: ${{ inputs.makefile-target }}
       run: make ${{ inputs.makefile-target }}
       shell: bash
+    - name: Prepare for PyPI upload
+      if: ${{ inputs.pypi-token }}
+      run: python3 setup.py bdist_wheel
+      shell: bash
     - name: Publish to PyPI
       if: ${{ inputs.pypi-token }}
-      run: echo "TBU" # TODO: To be updated
-      shell: bash
+      uses: pypa/gh-action-pypi-publish@v1.5.0
+      with:
+        user: __token__
+        password: ${{ inputs.pypi-token }}
