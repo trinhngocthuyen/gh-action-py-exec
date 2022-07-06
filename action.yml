@@ -24,7 +24,7 @@ runs:
     - name: Hook version
       if: ${{ inputs.hook-version-file }} && ${{ inputs.hook-version-suffix }}
       run: |
-        echo -n ${{ hook-version-suffix }} >> ${{ inputs.hook-version-file }}
+        echo -n ${{ inputs.hook-version-suffix }} >> ${{ inputs.hook-version-file }}
         echo "version = $(cat ${{ inputs.hook-version-file }})"
       shell: bash
     - name: Run makefile target (${{ inputs.makefile-target }})
