@@ -8,7 +8,10 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - uses: actions/setup-python@v4
+    - name: Check out
+      uses: actions/checkout@v3
+    - name: Set up Python
+      uses: actions/setup-python@v4
       with:
         python-version: ${{ inputs.python-version }}
     - name: Hook version
@@ -16,5 +19,6 @@ runs:
         echo -n ${VERSION_SUFFIX} >> VERSION
         echo "version = $(cat VERSION)"
       shell: bash
-    - run: make install
+    - name: Install dependencies
+      run: make install
       shell: bash
