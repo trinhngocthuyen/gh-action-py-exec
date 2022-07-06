@@ -11,6 +11,8 @@ inputs:
     description: "Version suffix (for re-release version)"
   makefile-target:
     description: "Makefile target"
+  pypi-token:
+    description: "PyPI API token"
 
 runs:
   using: "composite"
@@ -30,4 +32,8 @@ runs:
     - name: Run makefile target (${{ inputs.makefile-target }})
       if: ${{ inputs.makefile-target }}
       run: make ${{ inputs.makefile-target }}
+      shell: bash
+    - name: Publish to PyPI
+      if: ${{ inputs.pypi-token }}
+      run: echo "TBU" # TODO: To be updated
       shell: bash
