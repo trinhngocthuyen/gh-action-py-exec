@@ -41,6 +41,10 @@ runs:
       with:
         user: __token__
         password: ${{ inputs.pypi-token }}
+    - name: Clean up pkg build artifacts
+      if: ${{ inputs.pypi-token }}
+      run: rm -rf build dist
+      shell: bash
     - name: Run makefile target (${{ inputs.makefile-target }})
       if: ${{ inputs.makefile-target }}
       run: make ${{ inputs.makefile-target }}
