@@ -29,10 +29,6 @@ runs:
         echo -n ${{ inputs.hook-version-suffix }} >> ${{ inputs.hook-version-file }}
         echo "version = $(cat ${{ inputs.hook-version-file }})"
       shell: bash
-    - name: Run makefile target (${{ inputs.makefile-target }})
-      if: ${{ inputs.makefile-target }}
-      run: make ${{ inputs.makefile-target }}
-      shell: bash
     - name: Prepare for PyPI upload
       if: ${{ inputs.pypi-token }}
       run: |
@@ -45,3 +41,7 @@ runs:
       with:
         user: __token__
         password: ${{ inputs.pypi-token }}
+    - name: Run makefile target (${{ inputs.makefile-target }})
+      if: ${{ inputs.makefile-target }}
+      run: make ${{ inputs.makefile-target }}
+      shell: bash
