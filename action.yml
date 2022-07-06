@@ -5,6 +5,13 @@ inputs:
     description: "Python version"
     required: true
     default: 3.8
+  hook-version-file:
+    description: "Hook version file (for pre-release version)"
+  hook-version-suffix:
+    description: "Version suffix (for re-release version)"
+  makefile-target:
+    description: "Makefile target"
+
 runs:
   using: "composite"
   steps:
@@ -15,10 +22,12 @@ runs:
       with:
         python-version: ${{ inputs.python-version }}
     - name: Hook version
+      if: ${{ inputs.hook-version-file }} && ${{ inputs.hook-version-suffix }}
       run: |
-        echo -n ${VERSION_SUFFIX} >> VERSION
-        echo "version = $(cat VERSION)"
+        echo -n ${{ hook-version-suffix }} >> ${{ inputs.hook-version-file }}
+        echo "version = $(cat ${{ inputs.hook-version-file }})"
       shell: bash
-    - name: Install dependencies
-      run: make install
+    - name: Run makefile target (${{ inputs.makefile-target }})
+      if: ${{ inputs.makefile-target }}
+      run: make ${{ inputs.makefile-target }}
       shell: bash
