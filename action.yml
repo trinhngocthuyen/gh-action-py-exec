@@ -35,7 +35,9 @@ runs:
       shell: bash
     - name: Prepare for PyPI upload
       if: ${{ inputs.pypi-token }}
-      run: python3 setup.py bdist_wheel
+      run: |
+        [[ ! -d .venv/bin/activate ]] || source .venv/bin/activate
+        python3 setup.py bdist_wheel
       shell: bash
     - name: Publish to PyPI
       if: ${{ inputs.pypi-token }}
