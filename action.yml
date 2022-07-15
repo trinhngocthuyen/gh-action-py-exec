@@ -50,7 +50,7 @@ runs:
       run: make ${{ inputs.makefile-target }}
       shell: bash
     - name: Upload artifacts
-      if: ${{ inputs.artifacts-path }}
+      if: ${{ always() }} && ${{ inputs.artifacts-path }}
       uses: actions/upload-artifact@v3
       with:
         path: ${{ inputs.artifacts-path }}
