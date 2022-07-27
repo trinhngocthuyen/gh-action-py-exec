@@ -13,12 +13,33 @@ inputs:
     description: "Makefile target"
   pypi-token:
     description: "PyPI API token"
+  artifacts-upload-name:
+    description: "Artifacts name (to upload)"
+  artifacts-upload-path:
+    description: "Artifacts path (to upload)"
+  artifacts-download-name:
+    description: "Artifacts name (to download)"
+  artifacts-download-path:
+    description: "Artifacts path (to download)"
+outputs:
+  artifacts-name:
+    description: "Artifacts name"
+    value: ${{ steps.upload-artifacts.outputs.name }}
+  artifacts-path:
+    description: "Artifacts path"
+    value: ${{ steps.upload-artifacts.outputs.path }}
 
 runs:
   using: "composite"
   steps:
     - name: Check out
       uses: actions/checkout@v3
+    - name: Download artifacts
+      if: inputs.artifacts-download-name || inputs.artifacts-download-path
+      uses: actions/download-artifact@v3
+      with:
+        name: ${{ inputs.artifacts-download-name }}
+        path: ${{ inputs.artifacts-download-path }}
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
@@ -50,7 +71,14 @@ runs:
       run: make ${{ inputs.makefile-target }}
       shell: bash
     - name: Upload artifacts
-      if: always() && inputs.artifacts-path
+      if: always() && (inputs.artifacts-upload-name || inputs.artifacts-upload-path)
       uses: actions/upload-artifact@v3
       with:
-        path: ${{ inputs.artifacts-path }}
+        name: ${{ inputs.artifacts-upload-name }}
+        path: ${{ inputs.artifacts-upload-path }}
+    - id: upload-artifacts
+      if: always() && (inputs.artifacts-upload-name || inputs.artifacts-upload-path)
+      run: |
+        echo "::set-output name=name::${{ inputs.artifacts-upload-name }}"
+        echo "::set-output name=path::${{ inputs.artifacts-upload-path }}"
+      shell: bash
