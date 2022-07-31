@@ -1,6 +1,9 @@
 name: "Install dependencies"
 description: "Install dependencies"
 inputs:
+  checkout-submodules:
+    description: "Whether to checkout submodules"
+    default: false
   python-version:
     description: "Python version"
     required: true
@@ -40,6 +43,7 @@ runs:
       with:
         name: ${{ inputs.artifacts-download-name }}
         path: ${{ inputs.artifacts-download-path }}
+        submodules: ${{ inputs.checkout-submodules }}
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
