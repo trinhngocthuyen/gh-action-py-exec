@@ -37,13 +37,14 @@ runs:
   steps:
     - name: Check out
       uses: actions/checkout@v3
+      with:
+        submodules: ${{ inputs.checkout-submodules }}
     - name: Download artifacts
       if: inputs.artifacts-download-name || inputs.artifacts-download-path
       uses: actions/download-artifact@v3
       with:
         name: ${{ inputs.artifacts-download-name }}
         path: ${{ inputs.artifacts-download-path }}
-        submodules: ${{ inputs.checkout-submodules }}
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
